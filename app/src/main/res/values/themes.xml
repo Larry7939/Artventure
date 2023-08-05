@@ -5,4 +5,8 @@
         <item name="android:includeFontPadding">false</item>
          <item name="colorPrimary">@color/G1</item>
     </style>
+
+    <style name="Widget.NoRippleBottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="android:background">@color/G6</item>
+    </style>
 </resources>
