@@ -9,4 +9,11 @@
     <style name="Widget.NoRippleBottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="android:background">@color/G6</item>
     </style>
+
+    <style name="Theme.App.Splash" parent="Theme.SplashScreen">
+        ....
+        <item name="android:windowSplashScreenBackground" tools:targetApi="S">@color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.Artventure</item>
+    </style>
 </resources>

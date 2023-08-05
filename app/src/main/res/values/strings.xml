@@ -2,6 +2,4 @@
     <string name="app_name">Artventure</string>
     <string name="menu_home">홈</string>
     <string name="menu_favorite">즐겨찾기</string>
-    <string name="label_home">Home</string>
-    <string name="label_favorite">Favorite</string>
 </resources>
