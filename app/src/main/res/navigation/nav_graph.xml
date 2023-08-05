@@ -13,7 +13,9 @@
             app:destination="@id/SearchFragment" />
         <action
             android:id="@+id/action_homeFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
+            app:destination="@id/favoriteFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -22,7 +24,9 @@
         android:label="Favorite" >
         <action
             android:id="@+id/action_favoriteFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/favoriteFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
