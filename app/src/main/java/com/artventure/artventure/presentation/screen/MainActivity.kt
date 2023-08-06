@@ -1,24 +1,29 @@
-package com.artventure.artventure
+package com.artventure.artventure.presentation.screen
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateInterpolator
+import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingActivity
 import com.artventure.artventure.databinding.ActivityMainBinding
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var splashScreen: SplashScreen
     override fun onCreate(savedInstanceState: Bundle?) {
         splashScreen = installSplashScreen()
         startSplash()
         super.onCreate(savedInstanceState)
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
@@ -62,6 +67,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             }
         }
     }
+
+
     companion object{
         const val SPLASH_DURATION =1500L
     }

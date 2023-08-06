@@ -2,4 +2,6 @@
     <string name="app_name">Artventure</string>
     <string name="menu_home">홈</string>
     <string name="menu_favorite">즐겨찾기</string>
+    <string name="search_collection">소장품 검색</string>
+    <string name="seoul_museum_of_art">서울시립미술관</string>
 </resources>
