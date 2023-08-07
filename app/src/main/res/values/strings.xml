@@ -4,4 +4,8 @@
     <string name="menu_favorite">즐겨찾기</string>
     <string name="search_collection">소장품 검색</string>
     <string name="seoul_museum_of_art">서울시립미술관</string>
+    <string name="search_hint">검색어를 입력하세요</string>
+    <string name="search_failure_desc">다른 검색어를 입력하거나\n 철자와 띄어쓰기를 확인해보세요.</string>
+    <string name="mnfct_year_ascending_order">제작년도 오름차순</string>
+    <string name="sector">부문</string>
 </resources>
