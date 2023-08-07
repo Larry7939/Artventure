@@ -60,42 +60,43 @@
             android:textCursorDrawable="@color/G3"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_start"
-            app:layout_constraintTop_toBottomOf="@id/ib_back" />
-        
+            app:layout_constraintTop_toBottomOf="@id/ib_back"
+            app:onFocusChange="@{vm.onFocusChangeListener}" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_sort_by_mnfct_year"
             android:layout_width="110dp"
             android:layout_height="30dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/border_sort_btn"
-            android:text="@string/mnfct_year_ascending_order"
+            android:drawableEnd="@drawable/bottom_arrow"
             android:fontFamily="@font/pretendard_m"
-            android:textColor="@color/G4"
-            android:textSize="11sp"
-            android:textAlignment="textStart"
             android:paddingStart="10dp"
             android:paddingEnd="8dp"
-            android:layout_marginTop="10dp"
-            android:drawableEnd="@drawable/bottom_arrow"
-            app:layout_constraintTop_toBottomOf="@id/et_search"
-            app:layout_constraintStart_toStartOf="@id/gl_start"/>
+            android:text="@string/mnfct_year_ascending_order"
+            android:textAlignment="textStart"
+            android:textColor="@color/G4"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/et_search" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_sort_by_sector"
             android:layout_width="55dp"
             android:layout_height="30dp"
+            android:layout_marginStart="8dp"
             android:background="@drawable/border_sort_btn"
-            android:text="@string/sector"
+            android:drawableEnd="@drawable/bottom_arrow"
             android:fontFamily="@font/pretendard_m"
-            android:textColor="@color/G4"
-            android:textSize="11sp"
-            android:textAlignment="textStart"
             android:paddingStart="10dp"
             android:paddingEnd="8dp"
-            android:drawableEnd="@drawable/bottom_arrow"
-            app:layout_constraintStart_toEndOf="@id/btn_sort_by_mnfct_year"
-            app:layout_constraintTop_toTopOf="@id/btn_sort_by_mnfct_year"
+            android:text="@string/sector"
+            android:textAlignment="textStart"
+            android:textColor="@color/G4"
+            android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@id/btn_sort_by_mnfct_year"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintStart_toEndOf="@id/btn_sort_by_mnfct_year"
+            app:layout_constraintTop_toTopOf="@id/btn_sort_by_mnfct_year" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -155,6 +156,7 @@
             android:elevation="1dp"
             android:text="@string/search"
             android:textAppearance="@style/TextAppearance.H3"
+            android:visibility="@{vm.isSearchEnable == true? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_start" />

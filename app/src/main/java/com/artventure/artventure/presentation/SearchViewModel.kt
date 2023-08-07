@@ -20,6 +20,9 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
     private var _isSearchEnable = MutableLiveData(false)
     val isSearchEnable:LiveData<Boolean>
         get() = _isSearchEnable
+    val onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+        _isSearchEnable.value = hasFocus
+    }
     private var _searchWordEmptyResult: MutableLiveData<String> = MutableLiveData<String>()
     val searchWordEmptyResult:LiveData<String>
         get() = _searchWordEmptyResult
@@ -39,6 +42,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
         get() = _totalCount
 
     var code = ""
+
     fun searchCollection() {
         viewModelScope.launch {
             _searchState.value = UiState.LOADING
