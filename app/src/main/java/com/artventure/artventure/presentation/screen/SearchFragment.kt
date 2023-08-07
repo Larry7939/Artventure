@@ -17,6 +17,7 @@ import com.artventure.artventure.presentation.SearchViewModel
 import com.artventure.artventure.presentation.adapter.SearchAdapter
 import com.artventure.artventure.util.UiState
 import com.artventure.artventure.util.extension.clearFocus
+import com.artventure.artventure.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -59,6 +60,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                     if (view?.text?.isNotEmpty() == true) {
                         requireContext().clearFocus(binding.etSearch)
                         searchViewModel.searchCollection()
+                    } else {
+                        warningEmptySearchWord()
+                    }
                     return true
                 }
                 return false
@@ -69,6 +73,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 requireContext().clearFocus(binding.etSearch)
                 searchViewModel.searchCollection()
             }
+            else{
+                warningEmptySearchWord()
+            }
+
+        }
+    }
+
+    private fun warningEmptySearchWord() {
+        requireContext().showToast(getString(R.string.warning_empty_search_word))
     }
 
     private fun addObserver() {

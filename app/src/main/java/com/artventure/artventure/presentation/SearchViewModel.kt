@@ -16,6 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(private val searchRepositoryImpl: SearchRepository) :
     ViewModel() {
+    private var _isSearchEnable = MutableLiveData(false)
+    val isSearchEnable:LiveData<Boolean>
+        get() = _isSearchEnable
     val searchWord: MutableLiveData<String> = MutableLiveData<String>()
 
     private var _collections = ListLiveData<CollectionDto>()

@@ -9,4 +9,5 @@
     <string name="mnfct_year_ascending_order">제작년도 오름차순</string>
     <string name="sector">부문</string>
     <string name="search">검색하기</string>
+    <string name="warning_empty_search_word">"검색어를 입력해주세요"</string>
 </resources>
