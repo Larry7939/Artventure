@@ -1,20 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.artventure.artventure.presentation.SearchViewModel" />
+
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.screen.SearchFragment">
+        android:background="@color/white">
 
-        <TextView
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="search" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/guide_start" />
 
-    </FrameLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/guide_end" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:background="@drawable/border_search_et"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:text="@={vm.searchWord}"
+            android:textAppearance="@style/TextAppearance.D2"
+            android:textColor="@color/G1"
+            android:textColorHint="@color/G4"
+            android:textCursorDrawable="@color/G3"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/ib_back" />
+        
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sort_by_mnfct_year"
+            android:layout_width="110dp"
+            android:layout_height="30dp"
+            android:background="@drawable/border_sort_btn"
+            android:text="@string/mnfct_year_ascending_order"
+            android:fontFamily="@font/pretendard_m"
+            android:textColor="@color/G4"
+            android:textSize="11sp"
+            android:textAlignment="textStart"
+            android:paddingStart="10dp"
+            android:paddingEnd="8dp"
+            android:layout_marginTop="10dp"
+            android:drawableEnd="@drawable/bottom_arrow"
+            app:layout_constraintTop_toBottomOf="@id/et_search"
+            app:layout_constraintStart_toStartOf="@id/gl_start"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sort_by_sector"
+            android:layout_width="55dp"
+            android:layout_height="30dp"
+            android:background="@drawable/border_sort_btn"
+            android:text="@string/sector"
+            android:fontFamily="@font/pretendard_m"
+            android:textColor="@color/G4"
+            android:textSize="11sp"
+            android:textAlignment="textStart"
+            android:paddingStart="10dp"
+            android:paddingEnd="8dp"
+            android:drawableEnd="@drawable/bottom_arrow"
+            app:layout_constraintStart_toEndOf="@id/btn_sort_by_mnfct_year"
+            app:layout_constraintTop_toTopOf="@id/btn_sort_by_mnfct_year"
+            app:layout_constraintBottom_toBottomOf="@id/btn_sort_by_mnfct_year"
+            android:layout_marginStart="8dp"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_sort_by_mnfct_year"
+            tools:listitem="@layout/item_collection" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_search_failure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:gravity="center"
+            android:text='@{"\"" + vm.searchWord + "\"에 대한 검색 결과가 없어요"}'
+            android:textAppearance="@style/TextAppearance.B1"
+            android:textColor="@color/G1"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/et_search" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_search_failed_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/search_failure_desc"
+            android:textAppearance="@style/TextAppearance.D3"
+            android:textColor="@color/G3"
+            app:layout_constraintEnd_toEndOf="@id/tv_search_failure"
+            app:layout_constraintStart_toStartOf="@id/tv_search_failure"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_failure" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_search_failure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_search_failure, tv_search_failed_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
