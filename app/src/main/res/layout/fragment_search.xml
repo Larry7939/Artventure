@@ -104,7 +104,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="70dp"
             android:orientation="vertical"
+            android:visibility="@{vm.searchState == vm.searchState.EMPTY|vm.searchState == vm.searchState.LOADING ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_sort_by_mnfct_year"
@@ -142,6 +144,18 @@
             android:layout_height="wrap_content"
             android:visibility="@{vm.searchState == vm.searchState.EMPTY ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="tv_search_failure, tv_search_failed_desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:indeterminateTint="@color/G2"
+            android:outlineProvider="none"
+            android:visibility="@{vm.searchState == vm.searchState.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

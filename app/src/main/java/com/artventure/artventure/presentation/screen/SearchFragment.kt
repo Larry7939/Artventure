@@ -19,7 +19,6 @@ import com.artventure.artventure.util.UiState
 import com.artventure.artventure.util.extension.clearFocus
 import com.artventure.artventure.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
@@ -85,21 +84,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun addObserver() {
-        searchViewModel.collections.observe(viewLifecycleOwner) {}
-        searchViewModel.searchState.observe(viewLifecycleOwner){state ->
-            when (state) {
-                UiState.LOADING -> {
-                    Timber.d("Loading")
-                }
-                UiState.EMPTY -> {
-                    Timber.d("Empty")
-                }
-                UiState.SUCCESS -> {
-                    initAdapter()
-                }
-                else -> {
-                    Timber.e("Error")
-                }
+        searchViewModel.searchState.observe(viewLifecycleOwner) { state ->
+            if (state == UiState.SUCCESS) {
+                initAdapter()
             }
         }
     }
