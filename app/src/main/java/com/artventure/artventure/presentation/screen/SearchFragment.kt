@@ -54,15 +54,21 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
         binding.etSearch.setOnEditorActionListener(object :
             TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+            override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    requireContext().clearFocus(binding.etSearch)
-                    searchViewModel.searchCollection()
+                    if (view?.text?.isNotEmpty() == true) {
+                        requireContext().clearFocus(binding.etSearch)
+                        searchViewModel.searchCollection()
                     return true
                 }
                 return false
             }
         })
+        binding.btnSearch.setOnClickListener {
+            if(binding.etSearch.text?.isNotEmpty() == true){
+                requireContext().clearFocus(binding.etSearch)
+                searchViewModel.searchCollection()
+            }
     }
 
     private fun addObserver() {

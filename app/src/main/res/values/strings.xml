@@ -8,4 +8,5 @@
     <string name="search_failure_desc">다른 검색어를 입력하거나\n 철자와 띄어쓰기를 확인해보세요.</string>
     <string name="mnfct_year_ascending_order">제작년도 오름차순</string>
     <string name="sector">부문</string>
+    <string name="search">검색하기</string>
 </resources>
