@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
             android:gravity="center"
-            android:text='@{"\"" + vm.searchWord + "\"에 대한 검색 결과가 없어요"}'
+            android:text='@{"\"" + vm.searchWordEmptyResult + "\"에 대한 검색 결과가 없어요"}'
             android:textAppearance="@style/TextAppearance.B1"
             android:textColor="@color/G1"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
@@ -139,7 +139,7 @@
             android:id="@+id/group_search_failure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="@{vm.searchState == vm.searchState.EMPTY ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="tv_search_failure, tv_search_failed_desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

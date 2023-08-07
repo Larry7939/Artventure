@@ -1,5 +1,6 @@
 package com.artventure.artventure.presentation
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,10 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
     private var _isSearchEnable = MutableLiveData(false)
     val isSearchEnable:LiveData<Boolean>
         get() = _isSearchEnable
+    private var _searchWordEmptyResult: MutableLiveData<String> = MutableLiveData<String>()
+    val searchWordEmptyResult:LiveData<String>
+        get() = _searchWordEmptyResult
+
     val searchWord: MutableLiveData<String> = MutableLiveData<String>()
 
     private var _collections = ListLiveData<CollectionDto>()
@@ -51,6 +56,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                     _searchState.value = UiState.SUCCESS
                 } else {
                     Timber.d("Empty")
+                    _searchWordEmptyResult.value = searchWord.value
                     _searchState.value = UiState.EMPTY
                 }
             }.onFailure {
