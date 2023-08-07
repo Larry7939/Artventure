@@ -53,7 +53,7 @@
             android:imeOptions="actionSearch"
             android:padding="15dp"
             android:singleLine="true"
-            android:text="@={vm.searchWord}"
+            android:text="@={vm.searchWordInput}"
             android:textAppearance="@style/TextAppearance.D2"
             android:textColor="@color/G1"
             android:textColorHint="@color/G4"
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
             android:gravity="center"
-            android:text='@{"\"" + vm.searchWordEmptyResult + "\"에 대한 검색 결과가 없어요"}'
+            android:text='@{"\"" + vm.searchWord + "\"에 대한 검색 결과가 없어요"}'
             android:textAppearance="@style/TextAppearance.B1"
             android:textColor="@color/G1"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
@@ -150,11 +150,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
+            android:id="@+id/pb_search_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="1dp"
             android:indeterminateTint="@color/G2"
-            android:outlineProvider="none"
             android:visibility="@{vm.searchState == vm.searchState.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -174,6 +174,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_start" />
+
+        <ProgressBar
+            android:id="@+id/pb_page_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:indeterminateTint="@color/G2"
+            android:visibility="@{vm.pagingState == vm.pagingState.LOADING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="15dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

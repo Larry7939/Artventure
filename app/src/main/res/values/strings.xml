@@ -10,4 +10,6 @@
     <string name="sector">부문</string>
     <string name="search">검색하기</string>
     <string name="warning_empty_search_word">"검색어를 입력해주세요"</string>
+    <string name="warning_last_search_word">"마지막 검색 결과입니다."</string>
+
 </resources>
