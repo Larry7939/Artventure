@@ -2,8 +2,11 @@ package com.artventure.artventure.application
 
 import android.app.Application
 import com.artventure.artventure.BuildConfig
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 
 class ApplicationClass : Application() {
 

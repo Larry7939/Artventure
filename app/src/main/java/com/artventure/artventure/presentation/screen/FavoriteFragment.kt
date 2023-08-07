@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingFragment
 import com.artventure.artventure.databinding.FragmentFavoriteBinding
+@AndroidEntryPoint
 
 class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragment_favorite) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

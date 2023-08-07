@@ -14,6 +14,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingActivity
 import com.artventure.artventure.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel: MainViewModel by viewModels()

@@ -11,7 +11,9 @@ import androidx.navigation.findNavController
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingFragment
 import com.artventure.artventure.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: MainViewModel by activityViewModels()
