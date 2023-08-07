@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.databinding.ItemCollectionBinding
-import com.bumptech.glide.Glide
-import timber.log.Timber
 
-class SearchAdapter(private val context: Context) :
+class SearchAdapter(
+    private val context: Context,
+    private val moveToDetail: (CollectionDto) -> Unit
+) :
     ListAdapter<CollectionDto, SearchAdapter.SearchViewHolder>(SearchCollectionItemCallback()) {
     private val inflater by lazy { LayoutInflater.from(context) }
 
@@ -28,6 +29,9 @@ class SearchAdapter(private val context: Context) :
         fun onBind(data: CollectionDto) {
             with(binding) {
                 collectionData = data
+                root.setOnClickListener {
+                    moveToDetail(data)
+                }
             }
         }
     }

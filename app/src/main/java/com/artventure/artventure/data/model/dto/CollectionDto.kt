@@ -1,5 +1,7 @@
 package com.artventure.artventure.data.model.dto
 
+import java.io.Serializable
+
 data class CollectionDto(
     val titleKor: String,
     val titleEng: String,
@@ -11,4 +13,4 @@ data class CollectionDto(
     val matrlTechnic: String,
     val mainImage: String,
     val thumbImage: String
-)
+) : Serializable

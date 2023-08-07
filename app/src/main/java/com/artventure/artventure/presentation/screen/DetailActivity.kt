@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.artventure.artventure.data.model.dto.CollectionDto
+import com.artventure.artventure.presentation.screen.SearchFragment.Companion.COLLECTION_CONTENT_KEY
+import com.artventure.artventure.presentation.screen.SearchFragment.Companion.SEARCH_BUNDLE_KEY
 import com.artventure.artventure.presentation.screen.ui.theme.ArtventureTheme
 import com.artventure.artventure.util.extension.customGetSerializable
 import timber.log.Timber
@@ -18,8 +20,8 @@ import timber.log.Timber
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bundle = intent.getBundleExtra("search")
-        val data = bundle?.customGetSerializable<CollectionDto>("content")
+        val bundle = intent.getBundleExtra(SEARCH_BUNDLE_KEY)
+        val data = bundle?.customGetSerializable<CollectionDto>(COLLECTION_CONTENT_KEY)
         Timber.d("$data")
 
         setContent {

@@ -1,5 +1,6 @@
 package com.artventure.artventure.presentation.screen
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.SystemClock
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingFragment
+import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.databinding.FragmentSearchBinding
 import com.artventure.artventure.presentation.MainViewModel
 import com.artventure.artventure.presentation.SearchViewModel
@@ -30,7 +32,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private val searchViewModel: SearchViewModel by viewModels()
 
     private val adapter by lazy {
-        SearchAdapter(requireContext())
+        SearchAdapter(requireContext(),::moveToDetail)
     }
     private lateinit var recyclerViewState: Parcelable
 
@@ -172,7 +174,19 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun showMainBottomNav() {
         mainViewModel.setBottomNavVisibility(View.VISIBLE)
     }
+
+    private fun moveToDetail(content:CollectionDto){
+        val intent = Intent(requireContext(),DetailActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable(COLLECTION_CONTENT_KEY,content)
+        intent.putExtra(SEARCH_BUNDLE_KEY,bundle)
+        startActivity(intent)
+    }
+
+
     companion object{
         const val SCROLL_TIME = 1000L
+        const val SEARCH_BUNDLE_KEY = "search"
+        const val COLLECTION_CONTENT_KEY = "content"
     }
 }
