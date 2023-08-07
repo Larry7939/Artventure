@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingActivity
 import com.artventure.artventure.databinding.ActivityMainBinding
+import com.artventure.artventure.presentation.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
