@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,10 +21,16 @@ import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.databinding.FragmentSearchBinding
 import com.artventure.artventure.presentation.MainViewModel
 import com.artventure.artventure.presentation.SearchViewModel
-import com.artventure.artventure.presentation.adapter.SearchAdapter
+import com.artventure.artventure.presentation.adapter.CollectionsAdapter
+import com.artventure.artventure.presentation.adapter.SectorFilteringDto
+import com.artventure.artventure.util.type.RefiningBottomSheetType
+import com.artventure.artventure.util.type.SortingType
 import com.artventure.artventure.util.UiState
 import com.artventure.artventure.util.extension.clearFocus
+import com.artventure.artventure.util.extension.setRefineBottomSheet
+import com.artventure.artventure.util.extension.setRefineBottomSheetClickListener
 import com.artventure.artventure.util.extension.showToast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,7 +39,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private val searchViewModel: SearchViewModel by viewModels()
 
     private val adapter by lazy {
-        SearchAdapter(requireContext(),::moveToDetail)
+        CollectionsAdapter(requireContext(), ::moveToDetail)
     }
     private lateinit var recyclerViewState: Parcelable
 
@@ -51,6 +58,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         addObserver()
     }
 
+
     private fun addListener() {
         binding.ibBack.setOnClickListener {
             moveToHome()
@@ -60,6 +68,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             backPressedCallback
         )
 
+        /**키보드 검색버튼 클릭 이벤트 및 빈 검색어에 대한 예외처리*/
         binding.etSearch.setOnEditorActionListener(object :
             TextView.OnEditorActionListener {
             override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -86,7 +95,52 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             }
 
         }
+        setSortingButtonListener()
         setSearchPagingListener()
+    }
+    private fun warningEmptySearchWord() {
+        requireContext().showToast(getString(R.string.warning_empty_search_word))
+    }
+
+    private fun initRefiningBottomSheet(sheetType: RefiningBottomSheetType) {
+        val refineBottomSheetPair = requireContext().setRefineBottomSheet(
+            sheetType = sheetType,
+            sortingType = searchViewModel.sortingState.value!!,
+            onFilteringConfirmed = ::onFilteringConfirmed,
+            filteringStates = searchViewModel.filteringState.value!!
+        )
+        val refineBottomSheet = refineBottomSheetPair.first
+        val bottomSheetBinding = refineBottomSheetPair.second
+        refineBottomSheet.setRefineBottomSheetClickListener(
+            bottomSheetBinding,
+            sheetType,
+            ::onSortingSelected
+        )
+        refineBottomSheet.show()
+    }
+
+    private fun setSortingButtonListener() {
+        /**제작년도 정렬*/
+        binding.btnSortByMnfctYear.setOnClickListener {
+            if (searchViewModel.collections.value?.isNotEmpty() == true) {
+                initRefiningBottomSheet(sheetType = RefiningBottomSheetType.YEAR_SORTING)
+            }
+        }
+        /**부문 필터링*/
+        binding.btnSortBySector.setOnClickListener {
+            if (searchViewModel.collections.value?.isNotEmpty() == true) {
+                initRefiningBottomSheet(sheetType = RefiningBottomSheetType.SECTOR_FILTERING)
+            }
+        }
+    }
+
+    private fun onSortingSelected(sortingType: SortingType) {
+        searchViewModel.setSortingState(sortingType)
+    }
+
+    private fun onFilteringConfirmed(filteringState: List<SectorFilteringDto>, refineBottomSheet: BottomSheetDialog) {
+        searchViewModel.setFilteringState(filteringState)
+        refineBottomSheet.dismiss()
     }
 
     private fun setSearchPagingListener() {
@@ -125,6 +179,52 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         })
     }
 
+
+
+    private fun addObserver() {
+        searchViewModel.searchState.observe(viewLifecycleOwner) { state ->
+            if (state == UiState.SUCCESS) {
+                initAdapter()
+            }
+        }
+        /**페이징 상태에 따른 예외처리*/
+        searchViewModel.pagingState.observe(viewLifecycleOwner) { state ->
+            if (state == UiState.SUCCESS) {
+                pagingSearchResult()
+            } else if (state == UiState.EMPTY) {
+                requireContext().showToast(getString(R.string.warning_last_search_word))
+            }
+        }
+        /**정렬 상태에 따른 텍스트 변경 작업*/
+        searchViewModel.sortingState.observe(viewLifecycleOwner) { state ->
+            initAdapter()
+            if (state == SortingType.MNFT_ASCENDING) {
+                binding.btnSortByMnfctYear.text = getString(R.string.mnft_year_ascending_order)
+            } else if (state == SortingType.MNFT_DESCENDING) {
+                binding.btnSortByMnfctYear.text = getString(R.string.mnft_year_descending_order)
+            }
+        }
+
+        /**부문 필터링 상태에 따른 텍스트 변경 작업*/
+        searchViewModel.filteringState.observe(viewLifecycleOwner) {
+            if (searchViewModel.selectedFilteringState.size == searchViewModel.filteringState.value?.size) {
+                binding.btnSortBySector.text = "전체"
+            } else {
+                if (searchViewModel.selectedFilteringState.size == 1) {
+                    binding.btnSortBySector.text = searchViewModel.selectedFilteringState[0]
+                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_filtering_btn, null)
+                } else if (searchViewModel.selectedFilteringState.isEmpty()) {
+                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_refine_btn, null)
+                    binding.btnSortBySector.text = "부문 미선택"
+                } else {
+                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_filtering_btn, null)
+                    binding.btnSortBySector.text =
+                        StringBuilder("${searchViewModel.selectedFilteringState[0]} 외 ${searchViewModel.selectedFilteringState.size - 1}")
+                }
+            }
+            initAdapter()
+        }
+    }
     private fun pagingSearchResult() {
         with(binding) {
             initAdapter()
@@ -137,33 +237,37 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         }
     }
 
-    private fun warningEmptySearchWord() {
-        requireContext().showToast(getString(R.string.warning_empty_search_word))
-    }
-
-    private fun addObserver() {
-        searchViewModel.searchState.observe(viewLifecycleOwner) { state ->
-            if (state == UiState.SUCCESS) {
-                initAdapter()
-            }
-        }
-        searchViewModel.pagingState.observe(viewLifecycleOwner) { state ->
-            if (state == UiState.SUCCESS) {
-                pagingSearchResult()
-            } else if (state == UiState.EMPTY) {
-                requireContext().showToast(getString(R.string.warning_last_search_word))
-            }
-        }
-    }
 
     private fun initAdapter() {
         with(binding) {
             rvSearchResult.adapter = adapter.apply {
                 submitList(
-                    searchViewModel.collections.value
+                    applyRefinementOnSearchResult(searchViewModel.collections.value)
                 )
             }
         }
+    }
+
+    /**검색 결과에 대한 부문 필터링 및 정렬 작업 */
+    private fun applyRefinementOnSearchResult(searchResult: MutableList<CollectionDto>?): List<CollectionDto> =
+        sortSearchResult(filterSearchResult(searchResult))
+
+    private fun sortSearchResult(searchResult: List<CollectionDto>?): List<CollectionDto> {
+        return searchResult?.let {
+            when (searchViewModel.sortingState.value) {
+                SortingType.MNFT_ASCENDING -> it.sortedBy { dto -> dto.mnfctYear }
+                SortingType.MNFT_DESCENDING -> it.sortedByDescending { dto -> dto.mnfctYear }
+                else -> emptyList()
+            }
+        } ?: emptyList()
+    }
+
+    private fun filterSearchResult(searchResult: MutableList<CollectionDto>?): List<CollectionDto> {
+        return searchResult?.let { result ->
+            result.filter {
+                it.sector in searchViewModel.selectedFilteringState
+            }
+        } ?: emptyList()
     }
 
     private fun moveToHome() {
@@ -175,18 +279,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         mainViewModel.setBottomNavVisibility(View.VISIBLE)
     }
 
-    private fun moveToDetail(content:CollectionDto){
-        val intent = Intent(requireContext(),DetailActivity::class.java)
+    private fun moveToDetail(content: CollectionDto) {
+        val intent = Intent(requireContext(), DetailActivity::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(COLLECTION_CONTENT_KEY,content)
-        intent.putExtra(SEARCH_BUNDLE_KEY,bundle)
+        bundle.putSerializable(SEARCH_BUNDLE_KEY, content)
+        intent.putExtra(SEARCH_INTENT_KEY, bundle)
         startActivity(intent)
     }
 
 
-    companion object{
+    companion object {
         const val SCROLL_TIME = 1000L
-        const val SEARCH_BUNDLE_KEY = "search"
-        const val COLLECTION_CONTENT_KEY = "content"
+        const val SEARCH_INTENT_KEY = "search"
+        const val SEARCH_BUNDLE_KEY = "search_content"
     }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_bottomsheet_sort"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tv_mnft_year_ascending_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="20dp"
+                android:stateListAnimator="@null"
+                android:text="@string/mnft_year_ascending_order"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.B1"
+                tools:textColor="@color/G1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tv_mnft_year_descending_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="20dp"
+                android:stateListAnimator="@null"
+                android:text="@string/mnft_year_descending_order"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.B1"
+                tools:textColor="@color/G4" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

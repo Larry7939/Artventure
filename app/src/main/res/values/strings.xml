@@ -12,8 +12,16 @@
     <string name="warning_empty_search_word">"검색어를 입력해주세요"</string>
     <string name="warning_last_search_word">"마지막 검색 결과입니다."</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="author">작가명</string>
+    <string name="mnft_year">제작년도</string>
+    <string name="standard">규격</string>
+    <string name="collected_year">수집년도</string>
+    <string name="mtrl_technic">재료 및 기법</string>
     <string name="title_favorite_tab">즐겨찾기</string>
     <string name="collection">소장품</string>
+    <string name="mnft_year_ascending_order">제작년도 오름차순</string>
+    <string name="mnft_year_descending_order">제작년도 내림차순</string>
+    <string name="confirm">확인</string>
     <string name="empty_collections">추가된 소장품이 없습니다.</string>
     <string name="clear_collection">전체 삭제</string>
     <string name="alert_clear_collection">소장품을 전부 삭제할까요?</string>

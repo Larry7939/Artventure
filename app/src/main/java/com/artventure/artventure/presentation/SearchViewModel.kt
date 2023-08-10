@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.domain.SearchRepository
+import com.artventure.artventure.presentation.adapter.SectorFilteringDto
 import com.artventure.artventure.util.ListLiveData
+import com.artventure.artventure.util.type.SortingType
 import com.artventure.artventure.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -50,6 +52,29 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
 
     private var code = ""
 
+    private var _sortingState = MutableLiveData(SortingType.MNFT_ASCENDING)
+    val sortingState: LiveData<SortingType>
+        get() = _sortingState
+    private val defaultFilteringStates = listOf(
+        SectorFilteringDto("전체", true),
+        SectorFilteringDto("회화", true),
+        SectorFilteringDto("한국화", true),
+        SectorFilteringDto("드로잉&판화", true),
+        SectorFilteringDto("조각", true),
+        SectorFilteringDto("뉴미디어", true),
+        SectorFilteringDto("사진", true),
+        SectorFilteringDto("설치", true),
+        SectorFilteringDto("디자인", true)
+    )
+    private var _filteringState = MutableLiveData(defaultFilteringStates)
+    val filteringState: LiveData<List<SectorFilteringDto>>
+        get() = _filteringState
+
+    val selectedFilteringState: List<String>
+        get() = filteringState.value!!.filter {
+            it.isSelected
+        }.map { it.sector }
+
     fun searchCollection() {
         viewModelScope.launch {
             _searchWord.value = searchWordInput.value
@@ -69,6 +94,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                     _searchState.value = UiState.SUCCESS
                 } else {
                     if (result.result?.code == "INFO-200") {
+                        _collections.clear()
                         _searchState.value = UiState.EMPTY
                     }
                 }
@@ -91,7 +117,6 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
             }.onSuccess { result ->
                 if (result.searchCollectionInfo != null) {
                     _collections.value?.addAll(result.searchCollectionInfo.infoList.map { it.toCollection() } as MutableList<CollectionDto>)
-                    Timber.d("Paging Success! size => ${_collections.value?.size}")
                     _pagingState.value = UiState.SUCCESS
                 } else {
                     if (result.result?.code == "INFO-200") {
@@ -103,6 +128,14 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                 _pagingState.value = UiState.ERROR
             }
         }
+    }
+
+    fun setSortingState(sortingType: SortingType) {
+        _sortingState.value = sortingType
+    }
+
+    fun setFilteringState(state: List<SectorFilteringDto>) {
+        _filteringState.value = state
     }
 
     fun initSearchIndex() {

@@ -7,6 +7,8 @@
 
         <import type="android.view.View" />
 
+        <import type="com.artventure.artventure.util.type.SortingType" />
+
         <variable
             name="vm"
             type="com.artventure.artventure.presentation.SearchViewModel" />
@@ -68,8 +70,9 @@
             android:layout_width="110dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/border_sort_btn"
+            android:background="@drawable/border_refine_btn"
             android:drawableEnd="@drawable/bottom_arrow"
+            android:enabled="@{vm.collections.size() > 0}"
             android:fontFamily="@font/pretendard_m"
             android:paddingStart="10dp"
             android:paddingEnd="8dp"
@@ -82,16 +85,17 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_sort_by_sector"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/border_sort_btn"
+            android:background="@drawable/border_refine_btn"
             android:drawableEnd="@drawable/bottom_arrow"
+            android:enabled="@{vm.collections.size() > 0}"
             android:fontFamily="@font/pretendard_m"
             android:paddingStart="10dp"
             android:paddingEnd="8dp"
             android:text="@string/sector"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="@color/G4"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@id/btn_sort_by_mnfct_year"
@@ -179,13 +183,13 @@
             android:id="@+id/pb_page_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:elevation="1dp"
             android:indeterminateTint="@color/G2"
             android:visibility="@{vm.pagingState == vm.pagingState.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="15dp"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
