@@ -1,6 +1,8 @@
 package com.artventure.artventure.di
 
+import com.artventure.artventure.data.repository.LocalDbRepositoryImpl
 import com.artventure.artventure.data.repository.SearchRepositoryImpl
+import com.artventure.artventure.data.service.LocalDbRepository
 import com.artventure.artventure.domain.SearchRepository
 import dagger.Binds
 import dagger.Module
@@ -14,4 +16,8 @@ interface RepositoryModule {
     @Singleton
     @Binds
     fun bindSearchCollectionRepository(searchRepositoryImpl: SearchRepositoryImpl):SearchRepository
+
+    @Singleton
+    @Binds
+    fun bindFavoriteCollectionRepository(localDbRepository: LocalDbRepositoryImpl): LocalDbRepository
 }

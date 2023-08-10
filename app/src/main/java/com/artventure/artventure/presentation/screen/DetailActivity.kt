@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +45,7 @@ import com.artventure.artventure.R
 import com.artventure.artventure.application.ApplicationClass
 import com.artventure.artventure.data.local.FavoriteCollectionDao
 import com.artventure.artventure.data.model.dto.CollectionDto
+import com.artventure.artventure.presentation.DetailViewModel
 import com.artventure.artventure.presentation.screen.FavoriteFragment.Companion.FAVORITE_BUNDLE_KEY
 import com.artventure.artventure.presentation.screen.FavoriteFragment.Companion.FAVORITE_INTENT_KEY
 import com.artventure.artventure.presentation.screen.SearchFragment.Companion.SEARCH_BUNDLE_KEY
@@ -64,6 +66,7 @@ import java.io.Serializable
 
 @AndroidEntryPoint
 class DetailActivity : ComponentActivity() {
+    private val viewModel: DetailViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var isFavorite = false
@@ -105,6 +108,7 @@ class DetailActivity : ComponentActivity() {
                         introData,
                         contentDataRowList,
                         onBackClick = { finish() },
+                        onConfirmRequest = { viewModel.addFavoriteCollection(collectionData) })
                 }
             }
         }
@@ -122,6 +126,7 @@ class DetailActivity : ComponentActivity() {
         finish()
     }
     private fun addObserver(){
+        viewModel.dbState.observe(this){state ->
             if (state == UiState.SUCCESS){
                 moveToFavorite()
             }
@@ -147,6 +152,7 @@ fun DetailScreen(
     val isFavorite = rememberSaveable { mutableStateOf(isFavoriteParam) }
     val isEngTitleVisible = rememberSaveable { mutableStateOf(false) }
     isEngTitleVisible.value = intro.titleKor != intro.titleEng
+    val isFavoriteDialogVisible = rememberSaveable { mutableStateOf(false) }
 
 
     Surface(
@@ -165,11 +171,20 @@ fun DetailScreen(
                     },
                     onBackClick = onBackClick,
                     onFavoriteClick = {
+                        isFavoriteDialogVisible.value = true
                     })
             }) { padding ->
             Content(Modifier.padding(padding), introData, contentData, isEngTitleVisible)
         }
 
+        AddFavoriteDialog(
+            visible = isFavoriteDialogVisible.value,
+            onDismissRequest = { isFavoriteDialogVisible.value = false },
+            onConfirmRequest = {
+                isFavorite.value = true
+                isFavoriteDialogVisible.value = false
+                onConfirmRequest()
+            })
     }
 }
 
@@ -274,6 +289,63 @@ fun TopAppBar(titleKor: String, resId: Int, onBackClick: () -> Unit, onFavoriteC
     }
 }
 
+@Composable
+private fun AddFavoriteDialog(
+    visible: Boolean,
+    onConfirmRequest: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    if (visible) {
+        CustomAlertDialog(onDismissRequest = { onDismissRequest() }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = G6)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 35.dp)
+                        .padding(horizontal = 24.dp)
+                        .align(CenterHorizontally),
+                    text = stringResource(R.string.favorite_dialog_desc),
+                    style = ArtventureTypography.displayLarge
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .clickable {
+                                onDismissRequest()
+                            }
+                            .padding(vertical = 30.dp)
+                            .weight(1f),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.favorite_dismiss),
+                        style = ArtventureTypography.displayMedium,
+                        color = G2
+                    )
+
+                    Text(
+                        modifier = Modifier
+                            .clickable {
+                                onConfirmRequest()
+                            }
+                            .padding(vertical = 30.dp)
+                            .weight(1f),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.favorite_confirm),
+                        style = ArtventureTypography.displayMedium,
+                        color = G2
+                    )
+                }
+
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
