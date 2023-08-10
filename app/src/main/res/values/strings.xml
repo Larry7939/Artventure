@@ -14,6 +14,7 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_favorite_tab">즐겨찾기</string>
     <string name="collection">소장품</string>
+    <string name="empty_collections">추가된 소장품이 없습니다.</string>
     <string name="clear_collection">전체 삭제</string>
     <string name="alert_clear_collection">소장품을 전부 삭제할까요?</string>
     <string name="custom_dialog_cancel">취소</string>

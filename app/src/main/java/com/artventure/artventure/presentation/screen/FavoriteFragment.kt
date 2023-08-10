@@ -85,7 +85,12 @@ class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragm
     private fun addObserver() {
         viewModel.dbState.observe(viewLifecycleOwner) { state ->
             if (state == UiState.SUCCESS) {
+                binding.rvFavoriteCollections.visibility = View.VISIBLE
+                binding.groupEmptyWarning.visibility = View.GONE
                 initAdapter()
+            } else if (state == UiState.EMPTY) {
+                binding.groupEmptyWarning.visibility = View.VISIBLE
+                binding.rvFavoriteCollections.visibility = View.GONE
             }
         }
     }
