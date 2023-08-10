@@ -9,22 +9,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.databinding.ItemCollectionBinding
 
-class SearchAdapter(
+class CollectionsAdapter(
     private val context: Context,
     private val moveToDetail: (CollectionDto) -> Unit
 ) :
-    ListAdapter<CollectionDto, SearchAdapter.SearchViewHolder>(SearchCollectionItemCallback()) {
+    ListAdapter<CollectionDto, CollectionsAdapter.CollectionsViewHolder>(CollectionItemCallback()) {
     private val inflater by lazy { LayoutInflater.from(context) }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        return SearchViewHolder(ItemCollectionBinding.inflate(inflater, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionsViewHolder {
+        return CollectionsViewHolder(ItemCollectionBinding.inflate(inflater, parent, false))
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CollectionsViewHolder, position: Int) {
         holder.onBind(currentList[position])
     }
 
-    inner class SearchViewHolder(private val binding: ItemCollectionBinding) :
+    inner class CollectionsViewHolder(private val binding: ItemCollectionBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(data: CollectionDto) {
             with(binding) {
@@ -37,9 +37,9 @@ class SearchAdapter(
     }
 }
 
-class SearchCollectionItemCallback : DiffUtil.ItemCallback<CollectionDto>() {
+class CollectionItemCallback : DiffUtil.ItemCallback<CollectionDto>() {
     override fun areItemsTheSame(oldItem: CollectionDto, newItem: CollectionDto): Boolean {
-        return oldItem.titleKor == newItem.titleKor
+        return (oldItem.titleKor == newItem.titleKor) && (oldItem.standard == newItem.standard)
     }
 
     override fun areContentsTheSame(oldItem: CollectionDto, newItem: CollectionDto): Boolean {
