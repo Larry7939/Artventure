@@ -19,7 +19,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         addListener()
     }
 
-    private fun addListener(){
+    private fun addListener() {
         binding.btnSearch.setOnClickListener {
             viewModel.setBottomNavVisibility(View.GONE)
             it.findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)

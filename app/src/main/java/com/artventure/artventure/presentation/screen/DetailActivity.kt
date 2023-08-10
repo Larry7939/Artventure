@@ -39,11 +39,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artventure.artventure.R
-import com.artventure.artventure.application.ApplicationClass
-import com.artventure.artventure.data.local.FavoriteCollectionDao
 import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.presentation.DetailViewModel
 import com.artventure.artventure.presentation.screen.FavoriteFragment.Companion.FAVORITE_BUNDLE_KEY
@@ -60,7 +57,6 @@ import com.artventure.artventure.util.extension.customGetSerializable
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.io.Serializable
 
 
@@ -72,13 +68,12 @@ class DetailActivity : ComponentActivity() {
         var isFavorite = false
         val searchBundle = intent.getBundleExtra(SEARCH_INTENT_KEY)
         val favoriteBundle = intent.getBundleExtra(FAVORITE_INTENT_KEY)
-        val bundle:Bundle?
-        if(searchBundle!= null) {
-             bundle = searchBundle
-        }
-        else{
+        val bundle: Bundle?
+        if (searchBundle != null) {
+            bundle = searchBundle
+        } else {
             bundle = favoriteBundle
-             isFavorite = true
+            isFavorite = true
         }
         val bundleKey = if (searchBundle != null) SEARCH_BUNDLE_KEY else FAVORITE_BUNDLE_KEY
         val collectionData = bundle?.customGetSerializable<CollectionDto>(bundleKey)
@@ -114,20 +109,21 @@ class DetailActivity : ComponentActivity() {
         }
     }
 
-    companion object{
+    companion object {
         const val DETAIL_INTENT_KEY = "detail"
     }
 
-    private fun moveToFavorite(){
+    private fun moveToFavorite() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("source", DETAIL_INTENT_KEY)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
         finish()
     }
-    private fun addObserver(){
-        viewModel.dbState.observe(this){state ->
-            if (state == UiState.SUCCESS){
+
+    private fun addObserver() {
+        viewModel.dbState.observe(this) { state ->
+            if (state == UiState.SUCCESS) {
                 moveToFavorite()
             }
         }
@@ -140,7 +136,7 @@ data class IntroData(val titleKor: String, val titleEng: String, val image: Stri
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    isFavoriteParam:Boolean,
+    isFavoriteParam: Boolean,
     intro: IntroData,
     content: List<ContentData>,
     onBackClick: () -> Unit,

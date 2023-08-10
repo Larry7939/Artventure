@@ -36,6 +36,7 @@ class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragm
         initDialog(container)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getFavoriteCollection()

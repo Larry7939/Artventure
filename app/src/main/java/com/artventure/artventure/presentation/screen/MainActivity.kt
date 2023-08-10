@@ -36,6 +36,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         addNavigationListener()
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -56,8 +58,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun startSplash() {
         splashScreen.setOnExitAnimationListener { splashScreenView ->
-            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 2.5f,1f)
-            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 2.5f,1f)
+            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 2.5f, 1f)
+            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 2.5f, 1f)
             ObjectAnimator.ofPropertyValuesHolder(splashScreenView.iconView, scaleX, scaleY).run {
                 interpolator = AnticipateInterpolator()
                 duration = SPLASH_DURATION
@@ -94,7 +96,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
 
-    companion object{
-        const val SPLASH_DURATION =1500L
+    companion object {
+        const val SPLASH_DURATION = 1500L
     }
 }

@@ -9,8 +9,8 @@ import com.artventure.artventure.data.model.dto.CollectionDto
 import com.artventure.artventure.domain.SearchRepository
 import com.artventure.artventure.presentation.adapter.SectorFilteringDto
 import com.artventure.artventure.util.ListLiveData
-import com.artventure.artventure.util.type.SortingType
 import com.artventure.artventure.util.UiState
+import com.artventure.artventure.util.type.SortingType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -93,7 +93,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                     code = result.searchCollectionInfo.result.code
                     _searchState.value = UiState.SUCCESS
                 } else {
-                    if (result.result?.code == "INFO-200") {
+                    if (result.result?.code == COLLECTION_SUCCESS_CODE) {
                         _collections.clear()
                         _searchState.value = UiState.EMPTY
                     }
@@ -119,7 +119,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                     _collections.value?.addAll(result.searchCollectionInfo.infoList.map { it.toCollection() } as MutableList<CollectionDto>)
                     _pagingState.value = UiState.SUCCESS
                 } else {
-                    if (result.result?.code == "INFO-200") {
+                    if (result.result?.code == COLLECTION_SUCCESS_CODE) {
                         _pagingState.value = UiState.EMPTY
                     }
                 }
@@ -154,5 +154,6 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
         const val START_INDEX = 1
         const val END_INDEX = 100
         const val PAGE_SIZE = 100
+        const val COLLECTION_SUCCESS_CODE = "INFO-200"
     }
 }

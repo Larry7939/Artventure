@@ -15,7 +15,7 @@ object BindingAdapter {
 
     @BindingAdapter("onFocusChange")
     @JvmStatic
-    fun onFocusChange(view:View, onFocusChangeListener: OnFocusChangeListener) {
+    fun onFocusChange(view: View, onFocusChangeListener: OnFocusChangeListener) {
         view.onFocusChangeListener = onFocusChangeListener
     }
 }

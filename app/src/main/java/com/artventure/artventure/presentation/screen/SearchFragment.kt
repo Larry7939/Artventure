@@ -23,13 +23,13 @@ import com.artventure.artventure.presentation.MainViewModel
 import com.artventure.artventure.presentation.SearchViewModel
 import com.artventure.artventure.presentation.adapter.CollectionsAdapter
 import com.artventure.artventure.presentation.adapter.SectorFilteringDto
-import com.artventure.artventure.util.type.RefiningBottomSheetType
-import com.artventure.artventure.util.type.SortingType
 import com.artventure.artventure.util.UiState
 import com.artventure.artventure.util.extension.clearFocus
 import com.artventure.artventure.util.extension.setRefineBottomSheet
 import com.artventure.artventure.util.extension.setRefineBottomSheetClickListener
 import com.artventure.artventure.util.extension.showToast
+import com.artventure.artventure.util.type.RefiningBottomSheetType
+import com.artventure.artventure.util.type.SortingType
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -98,6 +98,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         setSortingButtonListener()
         setSearchPagingListener()
     }
+
     private fun warningEmptySearchWord() {
         requireContext().showToast(getString(R.string.warning_empty_search_word))
     }
@@ -138,7 +139,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         searchViewModel.setSortingState(sortingType)
     }
 
-    private fun onFilteringConfirmed(filteringState: List<SectorFilteringDto>, refineBottomSheet: BottomSheetDialog) {
+    private fun onFilteringConfirmed(
+        filteringState: List<SectorFilteringDto>,
+        refineBottomSheet: BottomSheetDialog
+    ) {
         searchViewModel.setFilteringState(filteringState)
         refineBottomSheet.dismiss()
     }
@@ -180,7 +184,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
 
-
     private fun addObserver() {
         searchViewModel.searchState.observe(viewLifecycleOwner) { state ->
             if (state == UiState.SUCCESS) {
@@ -208,16 +211,25 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         /**부문 필터링 상태에 따른 텍스트 변경 작업*/
         searchViewModel.filteringState.observe(viewLifecycleOwner) {
             if (searchViewModel.selectedFilteringState.size == searchViewModel.filteringState.value?.size) {
-                binding.btnSortBySector.text = "전체"
+                binding.btnSortBySector.text = getString(R.string.entire_sector)
             } else {
                 if (searchViewModel.selectedFilteringState.size == 1) {
                     binding.btnSortBySector.text = searchViewModel.selectedFilteringState[0]
-                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_filtering_btn, null)
+                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.border_filtering_btn,
+                        null
+                    )
                 } else if (searchViewModel.selectedFilteringState.isEmpty()) {
-                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_refine_btn, null)
-                    binding.btnSortBySector.text = "부문 미선택"
+                    binding.btnSortBySector.background =
+                        ResourcesCompat.getDrawable(resources, R.drawable.border_refine_btn, null)
+                    binding.btnSortBySector.text = getString(R.string.sector_not_selected)
                 } else {
-                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(resources, R.drawable.border_filtering_btn, null)
+                    binding.btnSortBySector.background = ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.border_filtering_btn,
+                        null
+                    )
                     binding.btnSortBySector.text =
                         StringBuilder("${searchViewModel.selectedFilteringState[0]} 외 ${searchViewModel.selectedFilteringState.size - 1}")
                 }
@@ -225,6 +237,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             initAdapter()
         }
     }
+
     private fun pagingSearchResult() {
         with(binding) {
             initAdapter()

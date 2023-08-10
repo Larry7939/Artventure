@@ -12,6 +12,9 @@
     <string name="warning_empty_search_word">"검색어를 입력해주세요"</string>
     <string name="warning_last_search_word">"마지막 검색 결과입니다."</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="favorite_confirm">추가하기</string>
+    <string name="favorite_dismiss">아니오</string>
+    <string name="favorite_dialog_desc">즐겨찾기에 추가할까요?</string>
     <string name="author">작가명</string>
     <string name="mnft_year">제작년도</string>
     <string name="standard">규격</string>
@@ -27,5 +30,7 @@
     <string name="alert_clear_collection">소장품을 전부 삭제할까요?</string>
     <string name="custom_dialog_cancel">취소</string>
     <string name="custom_dialog_confirm">확인</string>
+    <string name="entire_sector">전체</string>
+    <string name="sector_not_selected">부문 미선택</string>
 
 </resources>
