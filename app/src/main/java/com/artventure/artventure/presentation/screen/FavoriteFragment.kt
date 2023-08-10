@@ -1,7 +1,8 @@
 package com.artventure.artventure.presentation.screen
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.artventure.artventure.databinding.FragmentFavoriteBinding
 import com.artventure.artventure.presentation.MainViewModel
 import com.artventure.artventure.presentation.adapter.CollectionsAdapter
 import com.artventure.artventure.util.UiState
+import com.artventure.artventure.util.extension.setCustomDialog
+import com.artventure.artventure.util.extension.setDialogClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,10 +26,21 @@ class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragm
         CollectionsAdapter(requireContext(), ::moveToDetail)
     }
     private val viewModel: MainViewModel by activityViewModels()
+    lateinit var clearDialog: AlertDialog
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        initDialog(container)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getFavoriteCollection()
         addObserver()
+        addListener()
     }
 
     private fun moveToDetail(content: CollectionDto) {
@@ -46,6 +60,28 @@ class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragm
             }
         }
     }
+
+    private fun initDialog(container: ViewGroup?) {
+        clearDialog = requireActivity().setCustomDialog(
+            layoutInflater,
+            container,
+            description = getString(R.string.alert_clear_collection),
+            cancelBtnText = getString(R.string.custom_dialog_cancel),
+            confirmBtnText = getString(R.string.custom_dialog_confirm)
+        )
+        addDialogListener()
+    }
+
+    private fun addDialogListener() {
+        clearDialog.setDialogClickListener { which ->
+            when (which) {
+                clearDialog.findViewById<AppCompatButton>(R.id.btn_dialog_confirm) -> {
+                    viewModel.clearFavoriteCollection()
+                }
+            }
+        }
+    }
+
     private fun addObserver() {
         viewModel.dbState.observe(viewLifecycleOwner) { state ->
             if (state == UiState.SUCCESS) {
@@ -53,6 +89,13 @@ class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>(R.layout.fragm
             }
         }
     }
+
+    private fun addListener() {
+        binding.btnClearCollection.setOnClickListener {
+            clearDialog.show()
+        }
+    }
+
 
     companion object {
         const val FAVORITE_INTENT_KEY = "favorite"

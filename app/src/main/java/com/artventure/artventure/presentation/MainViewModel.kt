@@ -52,4 +52,16 @@ class MainViewModel @Inject constructor(private val localDbRepositoryImpl: Local
         }
     }
 
+    fun clearFavoriteCollection() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _dbState.postValue(UiState.LOADING)
+            runCatching {
+                localDbRepositoryImpl.clearFavoriteCollections()
+            }.onSuccess {
+                _dbState.postValue(UiState.EMPTY)
+            }.onFailure {
+                _dbState.postValue(UiState.ERROR)
+            }
+        }
+    }
 }
