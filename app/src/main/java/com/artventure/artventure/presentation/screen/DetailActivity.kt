@@ -347,10 +347,3 @@ private fun AddFavoriteDialog(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun DetailScreenPreview() {
-    ArtventureTheme {
-    }
-}
