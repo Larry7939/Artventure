@@ -11,7 +11,8 @@
         <action
             android:id="@+id/action_homeFragment_to_SearchFragment"
             app:destination="@id/SearchFragment"
-            app:popUpTo="@id/homeFragment" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_homeFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment"
@@ -36,10 +37,14 @@
         android:label="Search" >
         <action
             android:id="@+id/action_SearchFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/SearchFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_SearchFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
+            app:destination="@id/favoriteFragment"
+            app:popUpTo="@id/SearchFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>
