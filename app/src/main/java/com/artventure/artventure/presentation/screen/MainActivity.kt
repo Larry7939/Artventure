@@ -11,7 +11,10 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingActivity
 import com.artventure.artventure.databinding.ActivityMainBinding
@@ -25,17 +28,18 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private val viewModel: MainViewModel by viewModels()
     private lateinit var splashScreen: SplashScreen
     private lateinit var navController: NavController
-    private var selectedItemId = R.id.home
     override fun onCreate(savedInstanceState: Bundle?) {
         splashScreen = installSplashScreen()
         startSplash()
         super.onCreate(savedInstanceState)
         binding.vm = viewModel
         binding.lifecycleOwner = this
+
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        addNavigationListener()
+        binding.bottomNav.setupWithNavController(navController)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -50,9 +54,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     private fun handleMoveFavoriteFromDetail() {
-        selectedItemId = R.id.favorite
         navController.navigate(R.id.action_SearchFragment_to_favoriteFragment)
-        binding.bottomNav.menu.findItem(R.id.favorite).isChecked = true
         viewModel.setBottomNavVisibility(View.VISIBLE)
     }
 
@@ -70,31 +72,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             }
         }
     }
-
-    private fun addNavigationListener() {
-        binding.bottomNav.setOnItemSelectedListener { menu ->
-            if (selectedItemId == menu.itemId) {
-                return@setOnItemSelectedListener false
-            }
-            selectedItemId = menu.itemId
-            when (menu.itemId) {
-                R.id.home -> {
-                    navController.navigate(R.id.action_favoriteFragment_to_homeFragment)
-                    true
-                }
-
-                R.id.favorite -> {
-                    navController.navigate(R.id.action_homeFragment_to_favoriteFragment)
-                    true
-                }
-
-                else -> {
-                    throw IllegalArgumentException("${this@MainActivity::class.java.simpleName} Not found menu item id")
-                }
-            }
-        }
-    }
-
 
     companion object {
         const val SPLASH_DURATION = 1500L
