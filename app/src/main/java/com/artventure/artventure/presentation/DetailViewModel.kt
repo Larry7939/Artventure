@@ -11,6 +11,7 @@ import com.artventure.artventure.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,19 +25,21 @@ class DetailViewModel @Inject constructor(private val localDbRepositoryImpl: Loc
         get() = _dbState
 
     fun addFavoriteCollection(collectionDto: CollectionDto) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _dbState.postValue(UiState.LOADING)
+        viewModelScope.launch {
+            _dbState.value = UiState.LOADING
             runCatching {
-                localDbRepositoryImpl.addFavoriteCollections(
-                    CollectionEntity(collection = collectionDto)
-                )
+                withContext(Dispatchers.IO) {
+                    localDbRepositoryImpl.addFavoriteCollections(
+                        CollectionEntity(collection = collectionDto)
+                    )
+                }
             }.onSuccess {
-                _dbState.postValue(UiState.SUCCESS)
+                _dbState.value = UiState.SUCCESS
             }.onFailure {
                 Timber.e(it.cause)
                 Timber.e(it.message)
                 Timber.e(it.localizedMessage)
-                _dbState.postValue(UiState.ERROR)
+                _dbState.value = UiState.ERROR
             }
         }
     }

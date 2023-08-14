@@ -11,6 +11,7 @@ import com.artventure.artventure.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,32 +36,36 @@ class MainViewModel @Inject constructor(private val localDbRepositoryImpl: Local
 
 
     fun getFavoriteCollection() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _dbState.postValue(UiState.LOADING)
+        viewModelScope.launch {
+            _dbState.value = UiState.LOADING
             runCatching {
-                localDbRepositoryImpl.getFavoriteCollections()
+                withContext(Dispatchers.IO){
+                    localDbRepositoryImpl.getFavoriteCollections()
+                }
             }.onSuccess { entities ->
                 if (entities.isNotEmpty()) {
-                    _dbState.postValue(UiState.SUCCESS)
                     _collections = (entities.map { it.collection } as MutableList<CollectionDto>)
+                    _dbState.value  = UiState.SUCCESS
                 } else {
-                    _dbState.postValue(UiState.EMPTY)
+                    _dbState.value = UiState.EMPTY
                 }
             }.onFailure {
-                _dbState.postValue(UiState.ERROR)
+                _dbState.value = UiState.ERROR
             }
         }
     }
 
     fun clearFavoriteCollection() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _dbState.postValue(UiState.LOADING)
+        viewModelScope.launch {
+            _dbState.value = UiState.LOADING
             runCatching {
-                localDbRepositoryImpl.clearFavoriteCollections()
+                withContext(Dispatchers.IO){
+                    localDbRepositoryImpl.clearFavoriteCollections()
+                }
             }.onSuccess {
-                _dbState.postValue(UiState.EMPTY)
+                _dbState.value = UiState.EMPTY
             }.onFailure {
-                _dbState.postValue(UiState.ERROR)
+                _dbState.value = UiState.ERROR
             }
         }
     }

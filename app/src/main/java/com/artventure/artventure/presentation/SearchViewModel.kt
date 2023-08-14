@@ -12,7 +12,9 @@ import com.artventure.artventure.util.ListLiveData
 import com.artventure.artventure.util.UiState
 import com.artventure.artventure.util.type.SortingType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -77,15 +79,19 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
 
     fun searchCollection() {
         viewModelScope.launch {
-            _searchWord.value = searchWordInput.value
+            _searchWord.value = searchWordInput.value.toString()
             _searchState.value = UiState.LOADING
             runCatching {
-                searchRepositoryImpl.getCollections(
-                    startIdx = START_INDEX,
-                    endIdx = END_INDEX,
-                    searchWord = searchWordInput.value.toString()
-                )
+                withContext(Dispatchers.IO) {
+                    searchRepositoryImpl.getCollections(
+                        startIdx = START_INDEX,
+                        endIdx = END_INDEX,
+                        searchWord = _searchWord.value!!
+                    )
+                }
+
             }.onSuccess { result ->
+                Timber.d(Thread.currentThread().name)
                 if (result.searchCollectionInfo != null) {
                     _collections.value =
                         result.searchCollectionInfo.infoList.map { it.toCollection() } as MutableList<CollectionDto>
@@ -94,7 +100,7 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
                     _searchState.value = UiState.SUCCESS
                 } else {
                     if (result.result?.code == COLLECTION_SUCCESS_CODE) {
-                        _collections.clear()
+                        _collections.value = mutableListOf()  // 데이터 변경시 새로운 객체로 설정
                         _searchState.value = UiState.EMPTY
                     }
                 }
@@ -105,15 +111,18 @@ class SearchViewModel @Inject constructor(private val searchRepositoryImpl: Sear
         }
     }
 
+
     fun pagingCollection() {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             _pagingState.value = UiState.LOADING
             runCatching {
-                searchRepositoryImpl.getCollections(
-                    startIdx = startIdx,
-                    endIdx = endIdx,
-                    searchWord = _searchWord.value.toString()
-                )
+                withContext(Dispatchers.IO) {
+                    searchRepositoryImpl.getCollections(
+                        startIdx = startIdx,
+                        endIdx = endIdx,
+                        searchWord = _searchWord.value.toString()
+                    )
+                }
             }.onSuccess { result ->
                 if (result.searchCollectionInfo != null) {
                     _collections.value?.addAll(result.searchCollectionInfo.infoList.map { it.toCollection() } as MutableList<CollectionDto>)
