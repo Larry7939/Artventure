@@ -9,5 +9,5 @@ import java.io.Serializable
 data class CollectionEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    var collection:CollectionDto
+    var collection: CollectionDto
 ) : Serializable

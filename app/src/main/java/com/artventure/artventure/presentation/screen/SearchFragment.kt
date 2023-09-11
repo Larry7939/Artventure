@@ -68,7 +68,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             backPressedCallback
         )
 
-        /**키보드 검색버튼 클릭 이벤트 및 빈 검색어에 대한 예외처리*/
+        // 키보드 검색버튼 클릭 이벤트 및 빈 검색어에 대한 예외처리
         binding.etSearch.setOnEditorActionListener(object :
             TextView.OnEditorActionListener {
             override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -86,7 +86,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         setSearchPagingListener()
     }
 
-    private fun processSearchCollection(){
+    private fun processSearchCollection() {
         if (binding.etSearch.text?.isNotEmpty() == true) {
             requireContext().clearFocus(binding.etSearch)
             searchViewModel.searchCollection()
@@ -118,13 +118,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun setSortingButtonListener() {
-        /**제작년도 정렬*/
+        // 제작년도 정렬
         binding.btnSortByMnfctYear.setOnClickListener {
             if (searchViewModel.collections.value?.isNotEmpty() == true) {
                 initRefiningBottomSheet(sheetType = RefiningBottomSheetType.YEAR_SORTING)
             }
         }
-        /**부문 필터링*/
+        // 부문 필터링
         binding.btnSortBySector.setOnClickListener {
             if (searchViewModel.collections.value?.isNotEmpty() == true) {
                 initRefiningBottomSheet(sheetType = RefiningBottomSheetType.SECTOR_FILTERING)
@@ -145,7 +145,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun setSearchPagingListener() {
-        /**스크롤의 위치가 마지막 아이템의 위치와 동일할 시 추가 index 호출*/
+        // 스크롤의 위치가 마지막 아이템의 위치와 동일할 시 추가 index 호출
         binding.rvSearchResult.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var lastScrollTime = 0
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -155,11 +155,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                         val lastPosition =
                             (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                         val totalCount = recyclerView.adapter?.itemCount
-                        /**스크롤 이벤트 중복 호출 방지*/
+                        // 스크롤 이벤트 중복 호출 방지
                         if (SystemClock.elapsedRealtime() - lastScrollTime > SCROLL_TIME) {
                             if (totalCount != null) {
                                 if (lastPosition == totalCount - 1 && searchViewModel.checkIndexValidation()) {
-                                    /**인덱스 증가 및 페이징 호출*/
+                                    // 인덱스 증가 및 페이징 호출
                                     searchViewModel.updateSearchIndex()
                                     searchViewModel.pagingCollection()
                                 }
@@ -173,7 +173,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                /**페이징 후 스크롤 초기화 시에 사용될 스크롤 위치 저장*/
+                // 페이징 후 스크롤 초기화 시에 사용될 스크롤 위치 저장
                 recyclerViewState =
                     (recyclerView.layoutManager as LinearLayoutManager).onSaveInstanceState()!!
             }
@@ -187,7 +187,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 initAdapter()
             }
         }
-        /**페이징 상태에 따른 예외처리*/
+        // 페이징 상태에 따른 예외처리
         searchViewModel.pagingState.observe(viewLifecycleOwner) { state ->
             if (state == UiState.SUCCESS) {
                 pagingSearchResult()
@@ -195,7 +195,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 requireContext().showToast(getString(R.string.warning_last_search_word))
             }
         }
-        /**정렬 상태에 따른 텍스트 변경 작업*/
+        // 정렬 상태에 따른 텍스트 변경 작업
         searchViewModel.sortingState.observe(viewLifecycleOwner) { state ->
             initAdapter()
             if (state == SortingType.MNFT_ASCENDING) {
@@ -205,7 +205,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             }
         }
 
-        /**부문 필터링 상태에 따른 텍스트 변경 작업*/
+        // 부문 필터링 상태에 따른 텍스트 변경 작업
         searchViewModel.filteringState.observe(viewLifecycleOwner) {
             if (searchViewModel.selectedFilteringState.size == searchViewModel.filteringState.value?.size) {
                 binding.btnSortBySector.text = getString(R.string.entire_sector)
@@ -238,7 +238,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun pagingSearchResult() {
         with(binding) {
             initAdapter()
-            /**어댑터 초기화 후 스크롤 위치 복원*/
+            // 어댑터 초기화 후 스크롤 위치 복원
             if (::recyclerViewState.isInitialized) {
                 (rvSearchResult.layoutManager as LinearLayoutManager).onRestoreInstanceState(
                     recyclerViewState
@@ -262,6 +262,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun applyRefinementOnSearchResult(searchResult: MutableList<CollectionDto>?): List<CollectionDto> =
         sortSearchResult(filterSearchResult(searchResult))
 
+    /**검색 결과에 대한 정렬 작업 */
     private fun sortSearchResult(searchResult: List<CollectionDto>?): List<CollectionDto> {
         return searchResult?.let {
             when (searchViewModel.sortingState.value) {
@@ -272,6 +273,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         } ?: emptyList()
     }
 
+    /**검색 결과에 대한 부문 필터링 작업 */
     private fun filterSearchResult(searchResult: MutableList<CollectionDto>?): List<CollectionDto> {
         return searchResult?.let { result ->
             result.filter {

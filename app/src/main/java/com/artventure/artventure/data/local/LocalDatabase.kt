@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.artventure.artventure.data.model.dto.CollectionDto
 
 @Database(entities = [CollectionEntity::class], version = 1, exportSchema = false)
 @TypeConverters(LocalTypeConverter::class)

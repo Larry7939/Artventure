@@ -39,13 +39,13 @@ class MainViewModel @Inject constructor(private val localDbRepositoryImpl: Local
         viewModelScope.launch {
             _dbState.value = UiState.LOADING
             runCatching {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     localDbRepositoryImpl.getFavoriteCollections()
                 }
             }.onSuccess { entities ->
                 if (entities.isNotEmpty()) {
                     _collections = (entities.map { it.collection } as MutableList<CollectionDto>)
-                    _dbState.value  = UiState.SUCCESS
+                    _dbState.value = UiState.SUCCESS
                 } else {
                     _dbState.value = UiState.EMPTY
                 }
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(private val localDbRepositoryImpl: Local
         viewModelScope.launch {
             _dbState.value = UiState.LOADING
             runCatching {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     localDbRepositoryImpl.clearFavoriteCollections()
                 }
             }.onSuccess {

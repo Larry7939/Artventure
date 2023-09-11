@@ -11,9 +11,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.artventure.artventure.R
 import com.artventure.artventure.binding.BindingActivity
@@ -46,7 +44,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         super.onNewIntent(intent)
         if (intent != null) {
             val source = intent.getStringExtra("source")
-            /**상세페이지에서의 즐겨찾기 추가 작업 -> 즐겨찾기 탭으로 이동*/
+            // 상세페이지에서의 즐겨찾기 추가 작업 -> 즐겨찾기 탭으로 이동
             if (source == DETAIL_INTENT_KEY) {
                 handleMoveFavoriteFromDetail()
             }

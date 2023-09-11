@@ -6,19 +6,20 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class LocalTypeConverter {
-    companion object{
+    companion object {
         private val gson = Gson()
-    @TypeConverter
-    @JvmStatic
-    fun fromCollectionDto(collectionDto: CollectionDto): String {
-        return gson.toJson(collectionDto)
-    }
 
-    @TypeConverter
-    @JvmStatic
-    fun toCollectionDto(json: String): CollectionDto {
-        val type = object : TypeToken<CollectionDto>() {}.type
-        return gson.fromJson(json, type)
-    }
+        @TypeConverter
+        @JvmStatic
+        fun fromCollectionDto(collectionDto: CollectionDto): String {
+            return gson.toJson(collectionDto)
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun toCollectionDto(json: String): CollectionDto {
+            val type = object : TypeToken<CollectionDto>() {}.type
+            return gson.fromJson(json, type)
+        }
     }
 }
