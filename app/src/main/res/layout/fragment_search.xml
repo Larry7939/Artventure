@@ -108,11 +108,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="@dimen/guide_bottom"
             android:orientation="vertical"
+            app:layout_goneMarginBottom="@dimen/guide_bottom"
             android:visibility="@{vm.searchState == vm.searchState.EMPTY|vm.searchState == vm.searchState.LOADING ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_search"
             app:layout_constraintTop_toBottomOf="@id/btn_sort_by_mnfct_year"
             tools:listitem="@layout/item_collection" />
 

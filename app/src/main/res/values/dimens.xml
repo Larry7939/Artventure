@@ -2,4 +2,5 @@
 <resources>
     <dimen name="guide_start">15dp</dimen>
     <dimen name="guide_end">15dp</dimen>
+    <dimen name="guide_bottom">15dp</dimen>
 </resources>
