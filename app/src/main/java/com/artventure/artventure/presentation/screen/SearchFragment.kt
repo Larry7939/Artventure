@@ -73,30 +73,27 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
             TextView.OnEditorActionListener {
             override fun onEditorAction(view: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (view?.text?.isNotEmpty() == true) {
-                        requireContext().clearFocus(binding.etSearch)
-                        searchViewModel.searchCollection()
-                        searchViewModel.initSearchIndex()
-                    } else {
-                        warningEmptySearchWord()
-                    }
+                    processSearchCollection()
                     return true
                 }
                 return false
             }
         })
         binding.btnSearch.setOnClickListener {
-            if (binding.etSearch.text?.isNotEmpty() == true) {
-                requireContext().clearFocus(binding.etSearch)
-                searchViewModel.searchCollection()
-                searchViewModel.initSearchIndex()
-            } else {
-                warningEmptySearchWord()
-            }
-
+            processSearchCollection()
         }
         setSortingButtonListener()
         setSearchPagingListener()
+    }
+
+    private fun processSearchCollection(){
+        if (binding.etSearch.text?.isNotEmpty() == true) {
+            requireContext().clearFocus(binding.etSearch)
+            searchViewModel.searchCollection()
+            searchViewModel.initSearchIndex()
+        } else {
+            warningEmptySearchWord()
+        }
     }
 
     private fun warningEmptySearchWord() {
